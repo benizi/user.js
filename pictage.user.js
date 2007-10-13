@@ -7,9 +7,14 @@
 // ==/UserScript==
 
 (function(){
-// BODY
 // http://www.pictage.com/photodisplay/PHOTODISPLAY/zoom_image.xml?producer=photodisplay&image=PIV2:374852/48&max_width=400&max_height=400&xsl=/xsl/pdconsumer/zoom_command.xsl&error_xsl=/xsl/orders/error.xsl&event=EVV1:374852&eov=&isfav=false&jsessionid=2064B55076A48EA737E6EFFBEC63B83D.bl1005a
+// image URL
 // http://pis-farm.pictage.com/servlet/PIS?load=/home/image/proxydb/M/P/MP003/2007/374852/01/44_D_S_0044.jpg|crop&x0=0&y0=1&wdth=900&hite=598|prop=below&wdth=2000&hite=2000&cb=0
+
+// var t = document.getElementById('a').style.cssText;
+// var m = t.match(/url\([^|]+\|load=([^|)]+)/);
+// alert(m[1]);
+
  function picturl(n) {
   var s = ''+n;
   while (s.length < 2) s = '0' + s;

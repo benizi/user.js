@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Shows the abbreviations
 // @namespace     http://benizi.com/gm
-// @description   Shows the 4-letter codes for links on typelogic.com
+// @description   Shows the 4-letter codes for "type relationship" links on typelogic.com
 // @include       http://*typelogic.com*
 // ==/UserScript==
 
