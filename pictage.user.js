@@ -13,7 +13,7 @@
 
 // var t = document.getElementById('a').style.cssText;
 // var m = t.match(/url\([^|]+\|load=([^|)]+)/);
-// alert(m[1]);
+// Match is in m[1]
 
  function picturl(n) {
   var s = ''+n;
