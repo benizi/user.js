@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          Disable all accesskeys
-// @namespace     http://diveintomark.org/projects/greasemonkey/
+// @namespace     http://benizi.com/gm
 // @description   Removes all accesskey attributes
 // @include       http://*
 // @include       https://*
