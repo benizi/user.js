@@ -8,6 +8,7 @@
 (function(){
  /* 8757 = 'URLS' on a touchtone keypad */
  var url = 'http://localhost:8757/'+encodeURIComponent(document.location)+'?'+encodeURIComponent(document.referrer);
+ if ('title' in document) url += '?'+encodeURIComponent(document.title);
 // alert(url);
  GM_xmlhttpRequest({
   url:url,
