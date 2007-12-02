@@ -7,7 +7,7 @@
 
 (function () {
  try {
-  var all = document.evaluate('//a[not(@title)]', document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+  var all = document.evaluate('//a[not(@title)][not(.//img)]', document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
   for (var j = 0; j < all.snapshotLength; j++) {
    var it = all.snapshotItem(j);
    var label = it.getAttribute('href');
