@@ -44,9 +44,17 @@ function monitorChanges(selector, frequency, callback, onlyonce) {
          height: logo.css('height'),
          width: logo.css('width')
       };
-      var img = jQuery('<img/>').attr({src:src}).css(css);
+      var img = jQuery('<img/>').attr({src:src,border:0}).css(css);
       page.append(img);
-      page.append(jQuery('<div></div>').text('Something changed'));
+      var messages = jQuery('.divNotificationsColumn1');
+      if (!messages.length) return;
+      messages.each(function(){
+         var div = jQuery('<div></div>').appendTo(page);
+         jQuery('div', this).each(function(){
+            div.append(jQuery('<div></div>').text(jQuery(this).text()));
+         });
+         jQuery('div:first', div).css({fontWeight:'bold'});
+      });
       var url = 'data:text/html;base64,'+encode_base64('<div>'+page.html()+'</div>');
       notification = window.webkitNotifications.createHTMLNotification(url);
       notification.onclose = function () { notification = null; };
