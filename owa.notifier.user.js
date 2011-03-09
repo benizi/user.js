@@ -11,6 +11,7 @@
 jQuery.noConflict();
 
 (function ($){
+   var testing = true;
    function monitorChanges(selector, frequency, callback, onlyonce) {
       var html = $(selector).html();
       var listener;
@@ -32,7 +33,7 @@ jQuery.noConflict();
       });
    }
    var notification = null;
-   monitorChanges('#divAlertBar', 1000, function(){
+   var onChangeFunction = function(){
       if (notification) return;
       var page = $('<div></div>');
       var logo = $('#imgLiveLogo');
@@ -45,18 +46,40 @@ jQuery.noConflict();
       };
       var img = $('<img/>').attr({src:src,border:0}).css(css);
       page.append(img);
-      var messages = $('.divNotificationsColumn1');
+      var messages = $('.divNotificationsItem');
       if (!messages.length) return;
+      var anyCurrent = false;
       messages.each(function(){
+         if ($(this).css('display') == 'none') return;
+         anyCurrent = true;
          var div = $('<div></div>').appendTo(page);
-         $('div', this).each(function(){
+         $('.divNotificationsColumn1 div', this).each(function(){
             div.append($('<div></div>').text($(this).text()));
          });
          $('div:first', div).css({fontWeight:'bold'});
+         var when = [];
+         $('.divNotificationsColumn2, .divNotificationsColumn3', this).each(function(){
+            when.unshift($(this).text());
+         });
+         div.append($('<div></div>').text(when.join(' ')));
       });
+      if (!anyCurrent) return;
       var url = 'data:text/html;base64,'+encode_base64('<div>'+page.html()+'</div>');
       notification = window.webkitNotifications.createHTMLNotification(url);
       notification.onclose = function () { notification = null; };
       notification.show();
-   });
+   };
+   monitorChanges('#divAlertBar', 1000, onChangeFunction);
+   if (testing) {
+      $.each([
+         { text: 'Test Popper', fn: function(){console.log('testing')} },
+         { text: 'Run Notifier', fn: onChangeFunction }
+      ], function(i,item) {
+         $('<div></div>')
+         .attr({_lnk:'1',class:'cmLnk mnuItmTxtItm'})
+         .text(item.text || 'No Text!?')
+         .click(item.fn)
+         .appendTo($('#divHelpContextMenu'));
+      });
+   }
 })(jQuery);
