@@ -58,11 +58,15 @@ jQuery.noConflict();
             div.append($('<div></div>').text($(this).text()));
          });
          $('div:first', div).css({fontWeight:'bold'});
-         var when = [];
-         $('.divNotificationsColumn2, .divNotificationsColumn3', this).each(function(){
-            when.unshift($(this).text());
+         var timeWords = [];
+         var el = this;
+         $.each([ '2', '3' ], function(_i,n) {
+            var css = '.divNotificationsColumn' + n;
+            $(css, el).find('div:not(:has(*))').each(function() {
+               timeWords.push($(this).text())
+            });
          });
-         div.append($('<div></div>').text(when.join(' ')));
+         div.append($('<div></div>').text(timeWords.join(' ')));
       });
       if (!anyCurrent) return;
       var url = 'data:text/html;base64,'+encode_base64('<div>'+page.html()+'</div>');
