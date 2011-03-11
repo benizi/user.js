@@ -33,7 +33,8 @@ jQuery.noConflict();
       });
    }
    var notification = null;
-   var onChangeFunction = function(){
+   var onChangeFunction = function(evt){
+      var ignoreCurrency = (evt === true);
       if (notification) return;
       var page = $('<div></div>');
       var logo = $('#imgLiveLogo');
@@ -50,7 +51,7 @@ jQuery.noConflict();
       if (!messages.length) return;
       var anyCurrent = false;
       messages.each(function(){
-         if ($(this).css('display') == 'none') return;
+         if ($(this).css('display') == 'none' && !ignoreCurrency) return;
          anyCurrent = true;
          var div = $('<div></div>').appendTo(page);
          $('.divNotificationsColumn1 div', this).each(function(){
@@ -73,7 +74,8 @@ jQuery.noConflict();
    if (testing) {
       $.each([
          { text: 'Test Popper', fn: function(){console.log('testing')} },
-         { text: 'Run Notifier', fn: onChangeFunction }
+         { text: 'Run Notifier', fn: onChangeFunction },
+         { text: 'Test All', fn: function(){onChangeFunction(true)} }
       ], function(i,item) {
          $('<div></div>')
          .attr({_lnk:'1',class:'cmLnk mnuItmTxtItm'})
