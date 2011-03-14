@@ -53,6 +53,20 @@ jQuery.noConflict();
          notifications[id].click(function() { notifications[id] = null; $(this).remove(); });
       }
    }
+   function waitFor(selector, frequency, callback, once) {
+      var listener;
+      var listenfunc = function(){
+         var found = $(selector);
+         if (!found.length) return;
+         callback(found);
+         if (once) removeInterval(listener);
+      };
+      listener = setInterval(listenfunc, frequency);
+      listenfunc();
+   }
+   waitFor('#username:visible, #tdMsg:contains(signed out)', 15000, function(){
+      showNotificationHTML($('<div>Logged out</div>'),'signedout');
+   });
    var onChangeFunction = function(evt){
       var ignoreCurrency = (evt === true);
       var nid = 'reminders';
