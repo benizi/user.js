@@ -68,10 +68,8 @@ jQuery.noConflict();
       };
       var img = $('<img/>').attr({src:src,border:0}).css(css);
       page.append(img);
-      var messages = $('.divNotificationsItem');
-      if (!messages.length) return;
       var anyCurrent = false;
-      messages.each(function(){
+      $('.divNotificationsItem').each(function(){
          if ($(this).css('display') == 'none' && !ignoreCurrency) return;
          anyCurrent = true;
          var div = $('<div></div>').appendTo(page);
