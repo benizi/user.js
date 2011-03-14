@@ -18,14 +18,14 @@ jQuery.noConflict();
       var listener;
       listener = setInterval(function(){
          var newhtml = $(selector).html();
+         if (!newhtml) return;
          if (newhtml == html) return;
          html = newhtml;
          callback();
          if (onlyonce) clearInterval(listener);
       }, frequency);
    }
-   if (!window.webkitNotifications) return;
-   if (window.webkitNotifications.checkPermission()) {
+   if (window.webkitNotifications && window.webkitNotifications.checkPermission()) {
       $('<input type="button"/>')
       .value('Setup Notifications')
       .click(function(){
