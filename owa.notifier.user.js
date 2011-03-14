@@ -12,6 +12,7 @@ jQuery.noConflict();
 
 (function ($){
    var testing = true;
+   var notifications = {};
    function monitorChanges(selector, frequency, callback, onlyonce) {
       var html = $(selector).html();
       var listener;
@@ -32,10 +33,30 @@ jQuery.noConflict();
          $(this).remove();
       });
    }
-   var notification = null;
+   function showNotificationHTML(el, id) {
+      id = id || '';
+      if (notifications[id]) return;
+      if (window.webkitNotifications) {
+         var url = 'data:text/html;base64,'+encode_base64('<div>'+el.html()+'</div>');
+         notifications[id] = window.webkitNotifications.createHTMLNotification(url);
+         notifications[id].onclose = function () { notifications[id] = null; };
+         notifications[id].show();
+      } else {
+         var divid = 'popper_div_for_notifications';
+         var div = $('#'+divid);
+         if (!div.length) {
+            div = $('<div></div>').attr({id:divid})
+               .css({position:'fixed',top:0,right:0,zIndex:10000,background:'white'})
+               .appendTo($('body').filter(':first'));
+         }
+         notifications[id] = $('<div></div>').attr({id:divid+'_'+id}).append(el).appendTo(div);
+         notifications[id].click(function() { notifications[id] = null; $(this).remove(); });
+      }
+   }
    var onChangeFunction = function(evt){
       var ignoreCurrency = (evt === true);
-      if (notification) return;
+      var nid = 'reminders';
+      if (notifications[nid]) return;
       var page = $('<div></div>');
       var logo = $('#imgLiveLogo');
       var src = logo.attr('src');
@@ -68,11 +89,9 @@ jQuery.noConflict();
          });
          div.append($('<div></div>').text(timeWords.join(' ')));
       });
-      if (!anyCurrent) return;
-      var url = 'data:text/html;base64,'+encode_base64('<div>'+page.html()+'</div>');
-      notification = window.webkitNotifications.createHTMLNotification(url);
-      notification.onclose = function () { notification = null; };
-      notification.show();
+      if (!anyCurrent && !ignoreCurrency) return;
+      if (!anyCurrent) page.append($('<div>No pending reminders</div>'));
+      showNotificationHTML(page,nid);
    };
    monitorChanges('#divAlertBar', 1000, onChangeFunction);
    if (testing) {
