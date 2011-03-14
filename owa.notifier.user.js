@@ -81,8 +81,12 @@ jQuery.noConflict();
          var el = this;
          $.each([ '2', '3' ], function(_i,n) {
             var css = '.divNotificationsColumn' + n;
-            $(css, el).find('div:not(:has(*))').each(function() {
-               timeWords.push($(this).text())
+            // funky nodeType == text node stuff, since there are embedded br's
+            $(css, el).find('div:not(:contains(div))').each(function() {
+               $(this).contents().each(function(){
+                  if ($(this)[0].nodeType == 3)
+                     timeWords.push($(this)[0].nodeValue)
+               });
             });
          });
          div.append($('<div></div>').text(timeWords.join(' ')));
