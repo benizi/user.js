@@ -27,6 +27,21 @@ jQuery.noConflict();
       }, frequency);
    }
 
+   function deleteAllCookies() {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+         var cookie = cookies[i];
+         var toSplit = cookie.indexOf("=");
+         var name = toSplit > -1 ? cookie.substr(0, toSplit) : cookie;
+         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+   }
+
+   $(function(){
+      if (!($('contains(There was a problem):visible').length)) return;
+      deleteAllCookies();
+   });
+
    if (window.webkitNotifications && window.webkitNotifications.checkPermission()) {
       $('<input type="button"/>')
       .value('Setup Notifications')
