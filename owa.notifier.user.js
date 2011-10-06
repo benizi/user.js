@@ -13,6 +13,7 @@ jQuery.noConflict();
 (function ($){
    var testing = true;
    var notifications = {};
+
    function monitorChanges(selector, frequency, callback, onlyonce) {
       var html = $(selector).html();
       var listener;
@@ -25,6 +26,7 @@ jQuery.noConflict();
          if (onlyonce) clearInterval(listener);
       }, frequency);
    }
+
    if (window.webkitNotifications && window.webkitNotifications.checkPermission()) {
       $('<input type="button"/>')
       .value('Setup Notifications')
@@ -33,6 +35,7 @@ jQuery.noConflict();
          $(this).remove();
       });
    }
+
    function showNotificationHTML(el, id) {
       id = id || '';
       if (notifications[id]) return;
@@ -53,12 +56,14 @@ jQuery.noConflict();
          notifications[id].click(function() { notifications[id] = null; $(this).remove(); });
       }
    }
+
    // session timeout is 8 hours...
    setInterval(function(){
       $.get('keepalive.asx',null,function(){
          console.log('keptalive');
       });
    }, 5 * 60 * 60 * 1000); // five hours, in milliseconds
+
    function waitFor(selector, frequency, callback, once) {
       var listener;
       var listenfunc = function(){
@@ -70,9 +75,11 @@ jQuery.noConflict();
       listener = setInterval(listenfunc, frequency);
       listenfunc();
    }
+
    waitFor('#username:visible, #tdMsg:contains(signed out)', 45000, function(){
       showNotificationHTML($('<div>Logged out</div>'),'signedout');
    });
+
    $.fn.reverse = [].reverse;
    var onChangeFunction = function(evt){
       var ignoreCurrency = (evt === true);
