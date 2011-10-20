@@ -37,10 +37,8 @@ jQuery.noConflict();
       }
    }
 
-   $(function(){
-      if (!($('contains(There was a problem):visible').length)) return;
+   if ($('contains(There was a problem):visible').length)
       deleteAllCookies();
-   });
 
    if (window.webkitNotifications && window.webkitNotifications.checkPermission()) {
       $('<input type="button"/>')
