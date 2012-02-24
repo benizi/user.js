@@ -132,7 +132,6 @@ jQuery.noConflict();
    monitorChanges('#divAlertBar', 1000, onChangeFunction);
    if (testing) {
       $.each([
-         { text: 'Test Popper', fn: function(){console.log('testing')} },
          { text: 'Run Notifier', fn: onChangeFunction },
          { text: 'Test All', fn: function(){onChangeFunction(true)} }
       ], function(i,item) {
