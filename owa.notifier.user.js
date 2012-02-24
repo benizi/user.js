@@ -81,19 +81,32 @@ jQuery.noConflict();
       var page = $('<div></div>');
       var logo = $('#imgLiveLogo');
       var src = logo.attr('src');
+      var attr = { src: src };
       var css = {
          backgroundPosition: logo.css('backgroundPosition'),
          backgroundImage: logo.css('backgroundImage'),
+         backgroundColor: 'transparent',
          height: logo.css('height'),
-         width: logo.css('width')
+         width: logo.css('width'),
+         border: 0
       };
-      var img = $('<img/>').attr({src:src,border:0}).css(css);
-      page.append(img);
+      var bg = $('#divBackgroundImageMain');
+      var bgcss = {
+         backgroundImage: bg.css('backgroundImage'),
+         backgroundColor: 'transparent',
+         height: css.height,
+         width: '100%'
+      };
+      var imgdiv = $('<div></div>').appendTo(page);
+      var bgimg = $('<img/>').attr(attr).css(bgcss).appendTo(imgdiv);
+      var img = $('<img/>').attr(attr).css(css).appendTo(imgdiv);
+      img.css({position:'relative',top:'-'+css.height,marginBottom:'-'+css.height});
       var anyCurrent = false;
       $('.divNotificationsItem').reverse().each(function(){
          if ($(this).css('display') == 'none' && !ignoreCurrency) return;
-         anyCurrent = true;
          var div = $('<div></div>').appendTo(page);
+         //div.css({position:'relative',top:css.height});
+         anyCurrent = true;
          $('.divNotificationsColumn1 div', this).each(function(){
             div.append($('<div></div>').text($(this).text()));
          });
@@ -110,7 +123,7 @@ jQuery.noConflict();
                });
             });
          });
-         div.append($('<div></div>').text(timeWords.join(' ')));
+         $('div:last', div).append(' - ' + timeWords.join(' '));
       });
       if (!anyCurrent && !ignoreCurrency) return;
       if (!anyCurrent) page.append($('<div>No pending reminders</div>'));
