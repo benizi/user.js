@@ -73,6 +73,7 @@ jQuery.noConflict();
    waitFor('#username:visible, #tdMsg:contains(signed out)', 45000, function(){
       showNotificationHTML($('<div>Logged out</div>'),'signedout');
    });
+   $.fn.reverse = [].reverse;
    var onChangeFunction = function(evt){
       var ignoreCurrency = (evt === true);
       var nid = 'reminders';
@@ -89,7 +90,7 @@ jQuery.noConflict();
       var img = $('<img/>').attr({src:src,border:0}).css(css);
       page.append(img);
       var anyCurrent = false;
-      $('.divNotificationsItem').each(function(){
+      $('.divNotificationsItem').reverse().each(function(){
          if ($(this).css('display') == 'none' && !ignoreCurrency) return;
          anyCurrent = true;
          var div = $('<div></div>').appendTo(page);
