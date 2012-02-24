@@ -53,6 +53,12 @@ jQuery.noConflict();
          notifications[id].click(function() { notifications[id] = null; $(this).remove(); });
       }
    }
+   // session timeout is 8 hours...
+   setInterval(function(){
+      $.get('keepalive.asx',null,function(){
+         console.log('keptalive');
+      });
+   }, 5 * 60 * 60 * 1000); // five hours, in milliseconds
    function waitFor(selector, frequency, callback, once) {
       var listener;
       var listenfunc = function(){
