@@ -70,7 +70,7 @@ jQuery.noConflict();
       listener = setInterval(listenfunc, frequency);
       listenfunc();
    }
-   waitFor('#username:visible, #tdMsg:contains(signed out)', 15000, function(){
+   waitFor('#username:visible, #tdMsg:contains(signed out)', 45000, function(){
       showNotificationHTML($('<div>Logged out</div>'),'signedout');
    });
    var onChangeFunction = function(evt){
