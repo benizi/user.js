@@ -7,5 +7,15 @@
 // ==/UserScript==
 
 $(function(){
- $('a:contains(citation needed)').text('FUCK CITATIONS!');
+ $('sup.noprint').each(function(){
+  if ($(this).text() != '[' + $('a', this).text() + ']') return;
+  $('a', this).each(function() {
+   var rep = null;
+   switch ($(this).text()) {
+    case 'citation needed': rep = 'FUCK CITATIONS!'; break;
+    case 'vague': rep = 'ambiguity is inevitable'; break;
+   }
+   if (rep) $(this).text(rep);
+  });
+ });
 });
