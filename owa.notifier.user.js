@@ -37,7 +37,7 @@ jQuery.noConflict();
       id = id || '';
       if (notifications[id]) return;
       if (window.webkitNotifications) {
-         var url = 'data:text/html;base64,'+encode_base64('<div>'+el.html()+'</div>');
+         var url = 'data:text/html;base64,'+encode_base64('<div onclick="window.close()">'+el.html()+'</div>');
          notifications[id] = window.webkitNotifications.createHTMLNotification(url);
          notifications[id].onclose = function () { notifications[id] = null; };
          notifications[id].show();
