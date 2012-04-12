@@ -5,7 +5,7 @@
 // @require https://api.trello.com/1/client.js?key=f27e414384e2d5bec5d4b6c18e240896
 // ==/UserScript==
 
-(function($){
+;(function($){
 
   function id(what) {
     return 'trello-marquee-scroller-' + what;
