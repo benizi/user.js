@@ -121,16 +121,6 @@
         // find all open cards for this member
         var cards_path = 'members/' + member.id + '/cards/open';
         Trello.get(cards_path, function(cards) {
-          // Add the username -- will be replaced by avatar
-          $('#'+out).append(
-            $('<div></div>')
-            .data({uid:member.id})
-            .addClass('user')
-            .css({float:'left',clear:'left'})
-            .text(member.fullName)
-            .avatarify()
-          );
-
           $.each(cards, function(ic, card) {
             if (!card_divs[card.id]) {
               $(destination).append(
