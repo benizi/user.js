@@ -96,17 +96,25 @@
     var out = id('users');
 
     $('#' + out).remove();
-    $('<div></div>')
+
+    // make this list look like a Trello list
+    $('<div class="list"><div class="list-header clearfix"><span class="app-icon small-icon list-icon"></span><div class="list-title non-empty clearfix" attr="name"><h2 class="hide-on-edit current">Member Current Tasks</h2></div></div><div class="list-card-area"><div class="list-gradient-top"></div><div class="list-gradient-bottom"></div><div class="list-cards"></div></div></div>')
     .attr({id:out})
-    .css({background:'white',position:'absolute',bottom:'0px'})
+    .css({ width: $('.list:first').css('width') }) // match the list's width
     .click(currentBoardUsers)
-    .appendTo('body');
+    .prependTo('.list-area:first');
+
+    var destination = '#' + out + ' .list-cards';
 
     var board = currentBoard();
 
     // find all members on this board
     var members_path = 'boards/' + board + '/members?fields=fullName,initials,avatarHash';
     Trello.get(members_path, function(members) {
+
+      // keep track of cards, so they're not added multiple times
+      var card_divs = {};
+
       $.each(members, function(i,member){
         avatars[member.id] = member.avatarHash;
 
@@ -124,17 +132,35 @@
           );
 
           $.each(cards, function(ic, card) {
-            $('#'+out).append(
-              $('<div></div>').append(
-                $('<a></a>')
-                .attr({href:card.url})
-                .addClass('card')
-                .data('card', card.id)
-                .data('list', card.idList)
+            if (!card_divs[card.id]) {
+              $(destination).append(
+                $('<div class="list-card clearfix active-card"></div>')
+                .data({card: card.id})
+                .data({list: card.idList})
                 .hide()
                 .filterByList()
-                .text(card.name)
-              )
+                .append(
+                  $('<a class="list-card-title"></a>')
+                  .attr({href:card.url})
+                  .addClass('card')
+                  .text(card.name)
+                )
+                .append(
+                  $('<div class="list-card-members"></div>')
+                  .data('card', card.id)
+                  .css({ marginTop: '-28px' }) // Make these cards very compact
+                )
+              );
+              card_divs[card.id] = $('.list-card-members:last', destination)[0];
+            }
+
+            // Add the member to the existing card
+            $(card_divs[card.id])
+            .append(
+              $('<div class="member"></div>')
+              .data({uid:member.id})
+              .text(member.fullName)
+              .avatarify()
             );
           });
         });
