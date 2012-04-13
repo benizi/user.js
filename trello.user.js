@@ -33,12 +33,14 @@
     $(this).data({uid:uid});
     var size = '30';
     if (uid in avatars) {
+      var txt = this.text();
       this.html(
         $('<img class="member-avatar"/>')
         .attr({
           src: 'https://trello-avatars.s3.amazonaws.com/' + avatars[uid] + '/' + size + '.png',
           height: size,
-          width: size
+          width: size,
+          title: txt
         })
       );
     } else {
