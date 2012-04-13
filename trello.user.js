@@ -98,7 +98,7 @@
     $('#' + out).remove();
 
     // make this list look like a Trello list
-    $('<div class="list"><div class="list-header clearfix"><span class="app-icon small-icon list-icon"></span><div class="list-title non-empty clearfix" attr="name"><h2 class="hide-on-edit current">Member Current Tasks</h2></div></div><div class="list-card-area"><div class="list-gradient-top"></div><div class="list-gradient-bottom"></div><div class="list-cards"></div></div></div>')
+    $('<div class="list"><div class="list-header clearfix"><span class="app-icon small-icon list-icon"></span><div class="list-title non-empty clearfix" attr="name"><h2 class="hide-on-edit current">All Boards</h2></div></div><div class="list-card-area"><div class="list-gradient-top"></div><div class="list-gradient-bottom"></div><div class="list-cards"></div></div></div>')
     .attr({id:out})
     .css({ width: $('.list:first').css('width') }) // match the list's width
     .click(currentBoardUsers)
