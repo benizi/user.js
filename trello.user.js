@@ -159,13 +159,12 @@
   }
 
   function findCurrentCards() {
-    updateTrelloLogin();
     currentBoardUsers();
     $(window).trigger('resize');
   }
 
   function whenExists(selector, callback) {
-    if (!$(selector).length)
+    if ($(selector).length)
       callback();
     else
       window.setTimeout(function(){ whenExists(selector, callback) }, 100);
@@ -175,36 +174,85 @@
     console.log('Authorization failed?!');
   }
 
+  function addClicker(idpart, text, click) {
+    return $('<a class="button-link"></a>')
+    .attr({id:id(idpart)})
+    .append($('<span></span>').addClass('app-icon').addClass('small-icon').addClass('board-icon'))
+    .append(text)
+    .click(click)
+    .hide()
+    .appendTo('.board-widget:nth(1) .board-widget-content');
+  }
+
   function setupTrelloLogin() {
 
-    // Try non-interactive authorization first
-    Trello.authorize({
-      interactive: false,
-      succcess: findCurrentCards,
-      error: authFail
+    // Add a button to set up authorization
+    addClicker('login', 'Authorize Trello Popper', function() {
+      Trello.authorize({
+        type: 'popup',
+        succcess: updateTrelloLogin,
+        error: updateTrelloLogin
+      });
     });
 
-    if (Trello.authorized())
-      return findCurrentCards();
+    // And another to logout
+    addClicker('logout', 'Logout Trello Popper', function() {
+      Trello.deauthorize();
+      updateTrelloLogin();
+    });
 
-    // Otherwise put up a button to set up authorization
-    $('<div></div>')
-    .attr({id:id('login')})
-    .text('Authorize Trello popper')
-    .click(function(){
-      Trello.authorize({
-        succcess: findCurrentCards,
-        error: authFail
-      });
-    })
-    .css({background:'white'})
-    .appendTo('#board');
+    addClicker('refresh', 'Refresh Trello Popper', updateTrelloLogin).show();
+
+    // Try non-interactive authorization, updating buttons regardless of status
+    Trello.authorize({
+      interactive: false,
+      success: updateTrelloLogin,
+      error: updateTrelloLogin
+    });
   }
 
   function updateTrelloLogin() {
-    if (Trello.authorized())
-      $('#' + id('login')).toggle();
+    var loggedIn = Trello.authorized();
+    $('#' + id('login')).toggle(!loggedIn);
+    $('#' + id('logout')).toggle(loggedIn);
+    if (loggedIn)
+      findCurrentCards();
   }
 
   whenExists('#board-header', setupTrelloLogin);
+
+  /* workarounds for non-Firefox UserScript stuff
+  // *Script injection is munged by jQuery intentionally, so use the DOM directly*
+  function addJavaScript(opts) {
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    if (opts.src)
+      s.src = opts.src;
+    else
+      s.text = opts.text;
+    var h = document.getElementsByTagName('head')[0];
+    h.appendChild(s);
+  }
+
+  function addTrelloAndRunAgain() {
+    $(function(){
+      everRun = true;
+      addJavaScript({ src: 'https://api.trello.com/1/client.js?key=f27e414384e2d5bec5d4b6c18e240896' });
+
+      window.TrelloPopperStartup = function(trello) {
+        console.log('TrelloPopperStartup',trello);
+        doThisThing($, window, trello);
+      };
+
+      addJavaScript({ text: 'console.log("appended script"); console.log(window); TrelloPopperStartup(window.Trello)' });
+      console.log('outside');
+    });
+  }
+
+  if (!Trello && !everRun) {
+    addTrelloAndRunAgain();
+  } else {
+    console.log('running');
+  }
+  */
 })(jQuery);
