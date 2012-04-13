@@ -11,7 +11,7 @@
 ;(function($){
 
   function id(what) {
-    return 'trello-marquee-scroller-' + what;
+    return 'trello-popper-' + what;
   }
 
   $(window).on('resize', function(){
