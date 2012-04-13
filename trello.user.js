@@ -1,4 +1,7 @@
 // ==UserScript==
+// @name Trello Popper
+// @namespace http://userscripts.4moms.com/trello
+// @description Show what members of the current board are working on from all boards
 // @match http://trello.com/board/*
 // @match https://trello.com/board/*
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
