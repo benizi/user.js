@@ -2,8 +2,8 @@
 // @name Trello Popper
 // @namespace http://userscripts.4moms.com/trello
 // @description Show what members of the current board are working on from all boards
-// @match http://trello.com/board/*
-// @match https://trello.com/board/*
+// @match http://trello.com/*
+// @match https://trello.com/*
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @require https://api.trello.com/1/client.js?key=f27e414384e2d5bec5d4b6c18e240896
 // ==/UserScript==
@@ -219,7 +219,37 @@
       findCurrentCards();
   }
 
-  whenExists('#board-header', setupTrelloLogin);
+  function watchLocationChanges(callback) {
+    var lastLocation = '';
+    console.log('returning function');
+    return function(){
+      console.log('function called');
+      var loc = '' + window.location.href;
+      if (loc == lastLocation) { console.log('' + loc + ' == ' + lastLocation); return; }
+      console.log('navigated to: ' + loc);
+      lastLocation = loc;
+      callback(loc);
+    };
+  }
+
+  function runForBoard() {
+    whenExists('#board-header', setupTrelloLogin);
+  }
+
+  (function(w){
+    if (typeof(w.history.replacestate) != 'undefined') {
+      var originalPushState = w.history.pushState;
+      w.history.pushState = function(state) {
+        return originalPushState.apply(w.history, arguments);
+      };
+    } else {
+      runForBoard();
+    }
+  })(unsafeWindow || window);
+  //setInterval(watchLocationChanges(function(loc){
+  //  if (loc.match(/\/board\//))
+  //    whenExists('#board-header', setupTrelloLogin);
+  //}), 500);
 
   /* workarounds for non-Firefox UserScript stuff
   // *Script injection is munged by jQuery intentionally, so use the DOM directly*
