@@ -34,19 +34,24 @@
     var size = '30';
     if (uid in avatars) {
       var txt = this.text();
-      this.html(
-        $('<img class="member-avatar"/>')
-        .attr({
-          src: 'https://trello-avatars.s3.amazonaws.com/' + avatars[uid] + '/' + size + '.png',
-          height: size,
-          width: size,
-          title: txt
-        })
-      );
+      var image = avatars[uid];
+      if (image && image.length > 10) {
+        this.html(
+          $('<img class="member-avatar"/>')
+          .attr({
+            src: 'https://trello-avatars.s3.amazonaws.com/' + image + '/' + size + '.png',
+            height: size,
+            width: size,
+            title: txt
+          })
+        );
+      } else {
+        this.text(image);
+      }
     } else {
       var element = this;
       Trello.get('members/' + uid, function(member){
-        avatars[uid] = member.avatarHash;
+        avatars[uid] = member.avatarHash || member.initials;
         $(element).avatarify(uid);
       });
     }
@@ -116,7 +121,7 @@
       var card_divs = {};
 
       $.each(members, function(i,member){
-        avatars[member.id] = member.avatarHash;
+        avatars[member.id] = member.avatarHash || member.initials;
 
         // find all open cards for this member
         var cards_path = 'members/' + member.id + '/cards/open';
