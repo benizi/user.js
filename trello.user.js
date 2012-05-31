@@ -180,8 +180,11 @@
   }
 
   function addClicker(idpart, text, click) {
+    var _id = id(idpart);
+    var existing = $('#' + _id);
+    if (existing.length) return existing;
     return $('<a class="button-link"></a>')
-    .attr({id:id(idpart)})
+    .attr({id:_id})
     .append($('<span></span>').addClass('app-icon').addClass('small-icon').addClass('board-icon'))
     .append(text)
     .click(click)
