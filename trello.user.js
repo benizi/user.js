@@ -244,16 +244,39 @@
     whenExists('#board-header', setupTrelloLogin);
   }
 
-  (function(w){
-    if (typeof(w.history.replacestate) != 'undefined') {
-      var originalPushState = w.history.pushState;
-      w.history.pushState = function(state) {
-        return originalPushState.apply(w.history, arguments);
+  (function(window){
+    if (typeof(window.history.pushState) != 'undefined') {
+      //$.each(['pushState','replaceState'], function(i,fn) {
+      //  var original = history[fn];
+      //  history[fn] = function(state) {
+      //    console.log({state:state});
+      //    return original.apply(history, arguments);
+      //  };
+      //});
+      var history;
+      try {
+        history = XPCNativeWrapper.unwrap(window.history);
+      } catch (e) {
+        history = window.history;
+      }
+      var original = history.pushState;
+      console.log('modifying');
+      console.log(history);
+      history.pushState = function(state) {
+        console.log('pushState');
+        console.log(arguments);
+        return original.apply(history, arguments);
       };
+      console.log(history);
+      console.log('done');
     } else {
       runForBoard();
     }
   })(unsafeWindow || window);
+
+  $(window).on('popstate', function(e) {
+    console.log(e.originalEvent.state);
+  });
   //setInterval(watchLocationChanges(function(loc){
   //  if (loc.match(/\/board\//))
   //    whenExists('#board-header', setupTrelloLogin);
